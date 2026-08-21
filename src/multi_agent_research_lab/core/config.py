@@ -5,7 +5,7 @@ Keep config small and explicit. Do not read environment variables directly in ag
 
 from functools import lru_cache
 
-from pydantic import Field
+from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -17,8 +17,24 @@ class Settings(BaseSettings):
     app_env: str = Field(default="local", validation_alias="APP_ENV")
     log_level: str = Field(default="INFO", validation_alias="LOG_LEVEL")
 
-    openai_api_key: str | None = Field(default=None, validation_alias="OPENAI_API_KEY")
-    openai_model: str = Field(default="gpt-4o-mini", validation_alias="OPENAI_MODEL")
+    gemini_api_key: str | None = Field(
+        default=None,
+        validation_alias=AliasChoices("GEMINI_API_KEY", "GOOGLE_API_KEY", "OPENAI_API_KEY"),
+    )
+    gemini_model: str = Field(
+        default="gemini-2.5-flash",
+        validation_alias=AliasChoices("GEMINI_MODEL", "GOOGLE_MODEL", "OPENAI_MODEL"),
+    )
+
+    @property
+    def openai_api_key(self) -> str | None:
+        """Backward compatibility alias for openai_api_key."""
+        return self.gemini_api_key
+
+    @property
+    def openai_model(self) -> str:
+        """Backward compatibility alias for openai_model."""
+        return self.gemini_model
 
     langsmith_api_key: str | None = Field(default=None, validation_alias="LANGSMITH_API_KEY")
     langsmith_project: str = Field(

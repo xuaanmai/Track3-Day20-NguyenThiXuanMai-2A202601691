@@ -130,7 +130,7 @@ Bạn hoàn thành khi:
 
 **API keys (điền vào `.env`):**
 
-- `OPENAI_API_KEY` — bắt buộc (hoặc provider tương đương, tự điều chỉnh `llm_client.py`).
+- `GEMINI_API_KEY` — bắt buộc nếu dùng API thật (hoặc fallback generator khi offline / không có key).
 - `TAVILY_API_KEY` — tùy chọn; nếu không có, implement mock search trong `services/search_client.py`.
 - `LANGSMITH_API_KEY` hoặc `LANGFUSE_*` — tùy chọn cho tracing (khuyến nghị có ít nhất một).
 
